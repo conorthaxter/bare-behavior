@@ -1,0 +1,373 @@
+/* ---------- Section title: slides in from the right (services / bookings / info / faqs) ---------- */
+.section-title {
+  opacity: 0;
+  transform: translateX(64px);
+  transition: opacity 0.8s var(--ease-premium), transform 0.8s var(--ease-premium);
+}
+
+.section-title.is-in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.section-title.is-exiting {
+  opacity: 0;
+  transform: translateX(-64px);
+}
+
+/* ---------- Master card system: services / bookings / info / faqs ---------- */
+/* Every card locks to the exact same title-top and content-bottom clearance
+   (see --card-title-top / --card-bottom in tokens.css) so nothing shifts
+   section to section, regardless of how much content each one holds. */
+.card-section {
+  height: 100vh;
+  overflow: hidden;
+  /* .section's own padding-top/bottom would stack with the grid's
+     --card-title-top/--card-bottom below — this is the one true source of
+     top/bottom clearance for a card. */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.card-section .grid {
+  height: 100%;
+  width: 100%;
+  padding-top: var(--card-title-top);
+  padding-bottom: var(--card-bottom);
+  align-content: start;
+  /* Without an explicit row size, "auto" fits row 1 to its content's height
+     — meaning any child's own height:100% has nothing real to resolve
+     against (circular) and silently falls back to content-based sizing too.
+     A single row spanning the whole padded content box gives every card
+     child a real 100% to fill (with overflow:hidden as the safety net). */
+  grid-template-rows: 100%;
+}
+
+.card-title {
+  grid-column: 9 / span 4;
+  grid-row: 1;
+  align-self: start;
+}
+
+.card-content {
+  grid-column: 1 / span 6;
+  grid-row: 1;
+  height: 100%;
+  /* Text sizes are fixed (not shrunk-to-fit) across services/info/faqs/
+     bookings, so a card whose natural content is taller than the available
+     height scrolls internally rather than overflowing the page. */
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s var(--ease-premium), transform 0.6s var(--ease-premium);
+}
+
+.card-content.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-content.is-exiting {
+  opacity: 0;
+  transform: translateY(-28px);
+}
+
+/* ---------- Info & FAQs ---------- */
+.info-copy,
+.faq-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.info-copy .lede {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+}
+
+.info-copy .why-choose {
+  margin-top: var(--sp-2);
+}
+
+.info-copy .why-choose-title,
+.faq-copy dt {
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+.check-list li {
+  padding-left: 1.4em;
+  position: relative;
+}
+.check-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+}
+
+.faq-copy { gap: var(--sp-2); line-height: 1.45; }
+.faq-content { font-size: 17px; } /* fixed — matches services/info/bookings */
+.info-copy { font-size: 17px; }
+.faq-item + .faq-item { margin-top: var(--sp-2); }
+
+.faq-item dt { margin: 0; }
+.faq-question {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: 2px 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1em;
+  text-align: left;
+  color: var(--ink);
+}
+
+.faq-item.faq-note .faq-question {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.faq-question-icon {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  transition: transform 0.25s var(--ease-soft);
+}
+
+.faq-item.is-open .faq-question-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s var(--ease-soft);
+}
+
+.faq-item.is-open .faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+}
+
+.faq-item.is-open .faq-answer-inner {
+  padding-top: 4px;
+}
+
+.faq-outro { margin-top: var(--sp-2); font-weight: 700; }
+
+/* ---------- Bookings ---------- */
+.bookings-embed-wrap {
+  grid-column: 1 / span 8;
+  grid-row: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0;
+}
+
+.bookings-embed-placeholder {
+  border: 1px solid var(--ink);
+  width: 100%;
+  height: 100%;
+  /* Acuity's embed.js resizes the iframe *taller* to fit its own content
+     (it expects the page around it to grow, not to scroll the iframe
+     itself — Acuity's internal page isn't guaranteed to have its own
+     scrollbar). Forcing the iframe to our fixed height with !important
+     fought that and left the extra content simply unreachable — no
+     scrollbar anywhere. Letting the iframe grow and clipping/scrolling it
+     here, at the wrapper, keeps our layout fixed while keeping all of
+     Acuity's content reachable via a normal scroll. */
+  overflow-y: auto;
+}
+
+/* Acuity's iframe is cross-origin — nothing inside it is reachable from our
+   CSS, so all we can do is size the iframe *element* itself. min-height
+   (not height) fills the existing placeholder box exactly by default, but
+   still lets Acuity's own resize script grow it taller when its content
+   needs more room — the wrapper above scrolls the difference. */
+.bookings-embed-iframe {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  border: none;
+}
+
+.bookings-embed-note {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+}
+
+.bookings-embed-note--small {
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 14px;
+  max-width: 380px;
+  color: var(--accent);
+}
+
+/* ---------- Contact / address box (shared visual style) ---------- */
+.contact-box {
+  border: 1px solid var(--ink);
+  background: var(--bg);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  font-size: 16px;
+  width: 340px;
+  max-width: 340px;
+}
+
+.contact-box .ct-label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: var(--sp-1);
+}
+
+.contact-box .ct-group p { margin: 0; }
+.contact-box .ct-group a { color: var(--accent); }
+
+/* Single persistent address box: docks bottom-right (Bookings -> Info -> FAQs),
+   then hands off to centered (Come See Us). Position driven via JS transform
+   so both moves are one continuous, animatable property. Its bottom edge is
+   pinned level with the card system's own bottom clearance (--card-bottom)
+   so it lines up with the Bookings embed placeholder below it. */
+.address-box-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.9s var(--ease-premium), opacity 0.5s var(--ease-premium);
+}
+
+.address-box-fixed.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.contact-box-slot--mobile {
+  display: none;
+}
+
+/* ---------- Come see us (final CTA) ---------- */
+.come-see-us {
+  /* Shorter than a full viewport on purpose — leaves the footer's top edge
+     peeking into view at the bottom of the same screen as a "there's more
+     below" cue, rather than a hard cut at exactly 100vh. */
+  height: 88vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--card-bottom);
+  padding-bottom: var(--card-bottom);
+  text-align: center;
+}
+
+.come-see-us .grid {
+  width: 100%;
+  justify-items: center;
+}
+
+.come-see-us-title {
+  grid-column: 1 / span 12;
+  text-align: center;
+  margin-bottom: var(--sp-6);
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 0.8s var(--ease-premium), transform 0.8s var(--ease-premium);
+}
+
+.come-see-us-title.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bios {
+  grid-column: 3 / span 8;
+  display: flex;
+  gap: var(--sp-8);
+  justify-content: center;
+}
+
+.bio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-premium), transform 0.7s var(--ease-premium);
+}
+
+.bios.is-in-view .bio {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bios.is-in-view .bio:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.bio-photo {
+  width: 220px;
+  height: 280px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.bio-name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: var(--wordmark-tracking);
+  text-transform: lowercase;
+  font-size: 18px; /* matches .wordmark exactly, per spec */
+}
+
+@media (max-width: 900px) {
+  .card-section { height: auto; overflow: visible; padding-top: var(--sp-12); padding-bottom: var(--sp-12); }
+  .card-section .grid {
+    height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    row-gap: var(--sp-4);
+    /* Desktop locks row 1 to a 100%-height track so children can safely use
+       height:100%/auto against a real value — on mobile the grid itself is
+       auto-height, so that same 100% row is an ambiguous percentage that
+       resolves unpredictably (and default align-self:stretch then stretches
+       auto-height children to it). Rows must size to content instead. */
+    grid-template-rows: none;
+  }
+  .card-title { grid-column: 1 / span 12; grid-row: auto; align-self: auto; margin-bottom: var(--sp-4); text-align: left; transform: translateY(24px); }
+  .card-title.is-in-view { transform: translateY(0); }
+  .card-content { grid-column: 1 / span 12; grid-row: auto; height: auto; overflow: visible; }
+
+  .bookings-embed-wrap { grid-column: 1 / span 12; grid-row: auto; height: auto; align-items: stretch; }
+  /* A fixed height (not auto) so the wrapper has a real boundary to clip
+     and scroll against — same reasoning as the desktop rule above. */
+  .bookings-embed-placeholder { height: 480px; }
+  .bookings-embed-iframe { min-height: 100%; }
+
+  .address-box-fixed { display: none !important; }
+  .contact-box-slot--mobile { display: block; margin-top: var(--sp-6); }
+  .contact-box { max-width: none; width: 100%; }
+
+  .come-see-us { height: auto; overflow: visible; padding-top: var(--sp-12); padding-bottom: var(--sp-12); }
+  .come-see-us-title { text-align: center; }
+  .bios { grid-column: 1 / span 12; gap: var(--sp-4); }
+  .bio-photo { width: 45vw; height: 56vw; max-width: 220px; max-height: 280px; }
+}

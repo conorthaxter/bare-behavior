@@ -1,0 +1,50 @@
+:root {
+  /* Color — ONLY these three, by role */
+  --bg:      #FFFAED;  /* warm ivory — page background */
+  --ink:     #342222;  /* deep brown — text, active states, lines */
+  --accent:  #D1B8B8;  /* dusty rose — inactive dots/list items, dividers, connectors */
+
+  /* Grid */
+  --max-width: 1440px;
+  --margin: 100px;     /* outer page margin at desktop */
+  --gutter: 24px;
+  --columns: 12;
+
+  /* Vertical rhythm — 8px base. Use ONLY these. */
+  --sp-1: 8px;   --sp-2: 16px;  --sp-3: 24px;  --sp-4: 32px;
+  --sp-6: 48px;  --sp-8: 64px;  --sp-12: 96px; --sp-16: 128px;
+  --section-pad: var(--sp-16); /* generous — this creates the airy feel */
+
+  /* Master card grid — every "card" section (services/bookings/info/faqs)
+     locks its title + content-bottom to these exact same values so nothing
+     shifts section to section. Value matches the header clearance the
+     Bookings section already used, taken as the reference. */
+  --card-title-top: 192px;
+  --card-bottom: var(--sp-16);
+
+  /* Type scale */
+  --wordmark-tracking: 0.18em;
+  --font-display: "DM Serif Display", serif;
+  --font-sans: "DM Sans", sans-serif;
+
+  /* Easing — heavy/premium, no bounce */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --margin: 24px;
+    --gutter: 16px;
+    --section-pad: var(--sp-12);
+    --card-title-top: 96px;
+    --card-bottom: var(--sp-8);
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --margin: 20px;
+    --section-pad: var(--sp-8);
+  }
+}

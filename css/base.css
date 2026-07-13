@@ -1,0 +1,151 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+html {
+  background: var(--bg);
+  scroll-behavior: auto; /* smooth-scroll handled in JS so it can be intercepted/disabled */
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ---------- Scrollbars: brutalist / early-web — square, minimal, no radius ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink) var(--bg);
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border: 3px solid var(--bg); /* squares off the thumb's visible shape against the track */
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--bg);
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+/* ---------- Grid ---------- */
+.grid {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--margin);
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  gap: var(--gutter);
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  padding-top: var(--section-pad);
+  padding-bottom: var(--section-pad);
+  scroll-snap-align: start;
+  /* Guarantees a fast/long scroll gesture can't sail straight past this
+     section's snap point in one motion (which "proximity" alone allowed —
+     a strong swipe from FAQs could skip Come See Us entirely and land deep
+     in the footer). */
+  scroll-snap-stop: always;
+}
+
+/* The footer isn't a `.section`, but it needs its own snap point too: under
+   mandatory snapping, scrolling past the last snap point (Come See Us) with
+   nowhere valid to land forces the browser to pull back to it — this was the
+   original "scrolling to the footer snaps back up" bug. Giving the footer a
+   start-aligned snap point of its own fixes that without giving up mandatory
+   (needed for scroll-snap-stop to reliably catch Come See Us). Once resting
+   at the footer's top, there's nothing further to snap to, so scrolling the
+   rest of the way down it is completely free.  */
+.site-footer {
+  scroll-snap-align: start;
+}
+
+html.snap-enabled {
+  scroll-snap-type: y mandatory;
+}
+html.snap-enabled body {
+  height: 100%;
+}
+
+/* ---------- Type ramp ---------- */
+.wordmark {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: var(--wordmark-tracking);
+  text-transform: lowercase;
+  font-size: 18px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(48px, 6vw, 88px);
+  line-height: 1;
+  text-align: right;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+}
+
+/* ---------- Reduced motion base ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Focus ---------- */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}

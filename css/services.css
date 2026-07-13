@@ -1,0 +1,258 @@
+.services-grid {
+  width: 100%;
+}
+
+.services-figures-wrap {
+  grid-column: 1 / span 6;
+  grid-row: 1;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+  /* No opacity/transform gate here — the figures (stroke draw-on), dots, and
+     list rows each already animate in individually via playServicesIntro()
+     in services.js, so the wrapper itself must stay visible throughout. */
+}
+
+.figure-slot {
+  position: relative;
+  height: 100%;
+}
+
+.figure-slot svg {
+  height: 100%;
+  width: auto;
+  overflow: visible;
+}
+
+.figure-slot svg path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The back figure's source path isn't a true centerline (like front's
+   hand-drawn strokes) — it's a pre-converted stroke-to-fill band, so its
+   own boundary already carries some inherent width. Stroking that boundary
+   at the same 2px as front effectively doubles the visual weight; a
+   thinner stroke here compensates so both figures read the same. */
+.figure-back svg path {
+  stroke-width: 0.8px;
+}
+
+.figure-dot {
+  fill: var(--accent);
+  cursor: pointer;
+  transition: fill 0.25s var(--ease-soft);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.figure-dot.is-active {
+  fill: var(--ink);
+}
+
+/* Title sits at the top of this column (locked to --card-title-top via the
+   shared grid row, same as every other card), menu fills the rest of the
+   column's height below it — js/fit.js measures the remaining space and
+   scales the menu's font-size so its bottom lands on --card-bottom, level
+   with the figures' bottom. */
+.services-menu-col {
+  grid-column: 7 / span 6;
+  grid-row: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Right-aligned — matches every other section's title (top-right,
+     text-align:right via .card-title/.section-title). The menu below it
+     overrides back to full-width with align-self:stretch, since it needs
+     the whole column's width for two columns of left-aligned item text;
+     only the title itself hugs the right edge like elsewhere on the site. */
+  align-items: flex-end;
+}
+
+.services-menu-col .services-title {
+  flex-shrink: 0;
+  margin-bottom: var(--sp-4);
+  /* .card-title (sections.css, loaded after this file) sets align-self:start
+     for the grid context every *other* section's title lives in — here,
+     inside a flex column, align-self:start means flex-start (left), which
+     silently overrides this element's own parent's align-items:flex-end
+     and undoes the right-alignment entirely. The extra class in this
+     selector out-specifies .card-title so this wins regardless of load
+     order. */
+  align-self: flex-end;
+}
+
+#services-menu {
+  align-self: stretch;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto; /* fixed font-size (matches info/faqs/bookings) — scrolls internally if it ever runs long, rather than shrinking */
+  display: flex;
+  gap: var(--sp-6);
+  font-size: 17px;
+}
+
+.services-menu-column {
+  flex: 1;
+  min-width: 0;
+}
+
+.services-category + .services-category {
+  margin-top: 1.1em;
+}
+
+.services-category-title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.3em;
+  transition: color 0.25s var(--ease-soft);
+}
+
+.services-category-title.is-dim {
+  color: var(--accent);
+}
+
+.service-item-row {
+  display: block;
+  padding: 0.04em 0;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 1em;
+  line-height: 1.25;
+  transition: color 0.25s var(--ease-soft);
+}
+
+.service-item-row.is-active {
+  color: var(--ink);
+}
+
+/* ---------- Info box ---------- */
+.service-infobox {
+  position: absolute;
+  z-index: 20;
+  width: 240px;
+  border: 1px solid var(--accent);
+  background: var(--bg);
+  padding: var(--sp-3);
+  opacity: 0;
+  transform: scale(0.92);
+  transform-origin: top center;
+  transition: opacity 0.25s var(--ease-soft), transform 0.25s var(--ease-soft);
+  pointer-events: none;
+}
+
+.service-infobox.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.infobox-title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--sp-2);
+}
+
+.infobox-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: 15px;
+  padding: 3px 0;
+  color: var(--accent);
+  transition: color 0.2s var(--ease-soft);
+}
+
+.infobox-row.is-emphasized {
+  color: var(--ink);
+}
+
+.infobox-connector {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  border-top: 1px dotted var(--accent);
+  pointer-events: none;
+}
+
+/* ---------- Mobile service list -> modal ---------- */
+.service-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(52, 34, 34, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-premium);
+}
+
+.service-modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.service-modal-box {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--ink);
+  padding: var(--sp-6) var(--sp-4);
+  max-width: 380px;
+  width: calc(100% - 40px);
+  transform: translateY(16px);
+  opacity: 0;
+  transition: transform 0.4s var(--ease-premium), opacity 0.4s var(--ease-premium);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  align-items: center;
+}
+
+.service-modal-overlay.is-open .service-modal-box {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.service-modal-figure {
+  width: 100%;
+}
+.service-modal-figure svg { width: 100%; height: auto; }
+.service-modal-figure svg path { fill: none; stroke: var(--accent); stroke-width: 2px; }
+.service-modal-figure svg .figure-dot { fill: var(--ink); }
+
+.service-modal-info { grid-column: span 1; }
+.service-modal-title { font-family: var(--font-display); font-style: italic; font-size: 26px; margin-bottom: var(--sp-2); }
+.service-modal-price { font-weight: 700; margin-bottom: var(--sp-2); }
+.service-modal-desc { font-size: 14px; }
+
+.service-modal-close {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  width: 32px;
+  height: 32px;
+}
+
+@media (min-width: 901px) {
+  .services-mobile-list { display: none; }
+}
+
+@media (max-width: 900px) {
+  .services-figures-wrap { display: none; }
+  #services-menu { display: none; }
+  .services-menu-col { grid-column: 1 / span 12; grid-row: auto; height: auto; display: block; }
+  .services-title { text-align: left; margin-bottom: var(--sp-6); }
+  .service-modal-box { grid-template-columns: 1fr; text-align: center; }
+}

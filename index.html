@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bare behavior — less fuzz, more confidence</title>
+<meta name="description" content="Bare behavior is a waxing studio in Weymouth, MA. Less fuzz, more confidence.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFFAED'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23342222'/%3E%3C/svg%3E">
+
+<!-- Critical inline CSS: guarantees the ivory intro curtain paints first, with
+     zero network round-trip, so there is never a flash of unstyled/white content
+     or a glimpse of hero copy before the type-on begins. -->
+<style>
+  html,body{margin:0;background:#FFFAED;}
+  .wordmark-intro-slot{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:#FFFAED;}
+  /* Hides the raw, un-split "bare behavior" text the instant it's parsed —
+     without this, it paints fully visible (in whatever font is available at
+     that moment) for however long main.js takes to load/run, then vanishes
+     when intro.js hides it to start the char-by-char reveal. JS explicitly
+     un-hides it (see intro.js) only once it's ready to animate in. */
+  .wordmark-intro-slot .wordmark{opacity:0;}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;0,900;1,400&family=DM+Serif+Display:ital@0;1&display=block" rel="stylesheet">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/header-footer.css">
+<link rel="stylesheet" href="css/hero.css">
+<link rel="stylesheet" href="css/services.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/modal.css">
+</head>
+<body>
+
+<!-- Intro loading wordmark — FLIP-glides into the header wordmark once typed on -->
+<div class="wordmark-intro-slot" aria-hidden="true">
+  <span class="wordmark">bare behavior</span>
+</div>
+
+<header class="site-header">
+  <div class="grid">
+    <a class="wordmark" href="#hero"><span class="wordmark-text">bare behavior</span></a>
+    <nav class="site-nav">
+      <a href="#services" data-section="services" class="nav-services">services</a>
+      <a href="#bookings" data-section="bookings" class="nav-bookings">bookings</a>
+      <a href="#info" data-section="info" class="nav-info">info</a>
+      <a href="#faqs" data-section="faqs" class="nav-faqs">faqs</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section id="hero" class="section hero">
+    <div class="grid hero-grid">
+      <h1 class="hero-headline">
+        <span class="hero-less">LESS</span>
+        <span class="hero-fuzz-wrap" aria-label="FUZZ">
+          <canvas class="hero-fuzz-canvas" aria-hidden="true"></canvas>
+        </span>
+      </h1>
+      <p class="hero-sub"><span class="hero-sub-text">more confidence</span></p>
+    </div>
+  </section>
+
+  <section id="services" class="section services card-section">
+    <div class="grid services-grid">
+      <div class="services-figures-wrap">
+        <div class="figure-slot figure-front" aria-hidden="true"></div>
+        <div class="figure-slot figure-back" aria-hidden="true"></div>
+        <div class="service-infobox" id="service-infobox">
+          <div class="infobox-connector"></div>
+          <div class="infobox-content"></div>
+        </div>
+      </div>
+      <div class="services-menu-col">
+        <h2 class="section-title card-title services-title">services</h2>
+        <nav class="services-menu" id="services-menu" aria-label="Services"></nav>
+        <nav class="services-menu services-mobile-list" id="services-mobile-list" aria-label="Services"></nav>
+      </div>
+    </div>
+  </section>
+
+  <section id="bookings" class="section bookings card-section">
+    <div class="grid">
+      <h2 class="section-title card-title">bookings</h2>
+      <div class="bookings-embed-wrap">
+        <div class="bookings-embed-placeholder" id="bookings-embed">
+          <iframe class="bookings-embed-iframe" src="https://app.acuityscheduling.com/schedule.php?owner=39786424&amp;ref=embedded_csp" title="Schedule Appointment" allow="payment"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="info" class="section info card-section">
+    <div class="grid">
+      <h2 class="section-title card-title">info</h2>
+      <div class="info-copy card-content">
+        <p class="lede">We're not just removing hair, we're building confidence.</p>
+        <p>Every service is performed in a judgment-free space with attention to detail, professionalism, &amp; genuine care.</p>
+        <p>Created to give clients a waxing experience that feels elevated, welcoming, &amp; empowering. Because confidence looks different on everyone, but it feels good on everybody.</p>
+        <div class="why-choose">
+          <p class="why-choose-title">Why Choose Us?</p>
+          <ul class="check-list">
+            <li>Experienced licensed estheticians</li>
+            <li>Clean, comfortable environment.</li>
+            <li>Inclusive to everyBODY.</li>
+            <li>Results that keep you coming back.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faqs" class="section faqs card-section">
+    <div class="grid">
+      <h2 class="section-title card-title">FAQs</h2>
+      <div class="card-content faq-content">
+        <dl class="faq-copy">
+          <div class="faq-item">
+            <dt><button type="button" class="faq-question" aria-expanded="false"><span>Does waxing hurt?</span><span class="faq-question-icon" aria-hidden="true">+</span></button></dt>
+            <dd class="faq-answer"><div class="faq-answer-inner">Some may say it's not fun, but we make it as fun as possible. Most clients say it's far easier than expected. The first time can be tough—but the pain does not last longer than a second. :)</div></dd>
+          </div>
+          <div class="faq-item">
+            <dt><button type="button" class="faq-question" aria-expanded="false"><span>How long should my hair be?</span><span class="faq-question-icon" aria-hidden="true">+</span></button></dt>
+            <dd class="faq-answer"><div class="faq-answer-inner">About the length of a grain of rice, 2–3 weeks of hair growth.</div></dd>
+          </div>
+          <div class="faq-item">
+            <dt><button type="button" class="faq-question" aria-expanded="false"><span>My hair is too long—maybe I should trim or shave&hellip;</span><span class="faq-question-icon" aria-hidden="true">+</span></button></dt>
+            <dd class="faq-answer"><div class="faq-answer-inner">NO! Whatever you do&hellip; Don't pick up that razor. The hair could never be too long. Leave it to us. :)</div></dd>
+          </div>
+          <div class="faq-item faq-note">
+            <dt><button type="button" class="faq-question" aria-expanded="false"><span>New here?</span><span class="faq-question-icon" aria-hidden="true">+</span></button></dt>
+            <dd class="faq-answer"><div class="faq-answer-inner">Don't stress — waxing doesn't need to be intimidating. Whether it's your first time or 100th time, we're here to make the experience comfortable, quick, and as painless as possible.</div></dd>
+          </div>
+          <div class="faq-item">
+            <dt><button type="button" class="faq-question" aria-expanded="false"><span>— Before your appointment —</span><span class="faq-question-icon" aria-hidden="true">+</span></button></dt>
+            <dd class="faq-answer"><div class="faq-answer-inner">
+              Let your hair grow 2–3 weeks.<br>
+              Exfoliate 24 hours before.<br>
+              Arrive 5 mins early for intake form.<br>
+              Wear loose, comfortable clothing.
+            </div></dd>
+          </div>
+        </dl>
+        <p class="faq-outro">Questions? Just ask—we've heard it all!</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="come-see-us" class="section come-see-us">
+    <div class="grid">
+      <h2 class="section-title come-see-us-title">come see us &lt;3</h2>
+      <div class="bios">
+        <div class="bio">
+          <p class="bio-name">Kylie</p>
+          <div class="bio-photo"></div>
+        </div>
+        <div class="bio">
+          <p class="bio-name">Sabreena</p>
+          <div class="bio-photo"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="grid footer-grid">
+    <div class="footer-col">
+      <p class="label footer-label">visit</p>
+      <p>123 Main St.</p>
+      <p>Weymouth, MA&nbsp; 02324</p>
+      <p><a href="tel:+18001234567">(800)-123-4567</a></p>
+      <p><a href="mailto:kyliewhite@gmail.com">kyliewhite@gmail.com</a></p>
+    </div>
+
+    <div class="footer-col">
+      <p class="label footer-label">hours</p>
+      <p>Tue &ndash; Fri &middot; 10am &ndash; 7pm</p>
+      <p>Sat &middot; 9am &ndash; 5pm</p>
+      <p class="footer-closed">Sun &ndash; Mon &middot; closed</p>
+    </div>
+
+    <div class="footer-col">
+      <p class="label footer-label">follow</p>
+      <p class="footer-ig">
+        <a href="https://instagram.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="4.2"/>
+            <circle cx="17.4" cy="6.6" r="1"/>
+          </svg>
+          <span>@barebehavior</span>
+        </a>
+      </p>
+      <a class="footer-book-btn" href="#bookings" data-section="bookings">Book now</a>
+    </div>
+
+    <div class="footer-col">
+      <p class="label footer-label">get 10% off your first service</p>
+      <form class="footer-newsletter-form">
+        <input type="email" placeholder="you@email.com" aria-label="Email address" required>
+        <button type="submit">Join</button>
+      </form>
+      <p class="footer-newsletter-note">New clients only. Offer emailed to you.</p>
+    </div>
+  </div>
+
+  <div class="grid footer-legal-grid">
+    <div class="footer-legal-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cancellation policy</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 bare behavior</p>
+  </div>
+</footer>
+
+<!-- Single persistent address box (desktop): docks bottom-right from Bookings through FAQs, then centers at Come See Us -->
+<div class="contact-box-slot address-box-fixed" id="address-box" aria-hidden="true">
+  <div class="contact-box">
+    <div class="ct-group">
+      <p class="ct-label">Location:</p>
+      <p>123 Main St.</p>
+      <p>Weymouth, MA&nbsp; 02324</p>
+    </div>
+    <div class="ct-group">
+      <p class="ct-label">Bookings:</p>
+      <p>Bookings are done through <a href="#bookings" data-section="bookings">Acuity</a></p>
+    </div>
+    <div class="ct-group">
+      <p class="ct-label">Questions + inquiries:</p>
+      <p>Kylie White</p>
+      <p>(800)-123-4567</p>
+      <p>kyliewhite@gmail.com</p>
+    </div>
+  </div>
+</div>
+
+<!-- Phase 4: 10% offer modal -->
+<div class="modal-overlay" id="offer-modal" hidden>
+  <div class="modal-box">
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <p class="modal-title">Get 10% off your first service!</p>
+    <p class="modal-subtext">Sign up for email updates to receive this offer.</p>
+    <form class="modal-form">
+      <input type="email" placeholder="Your email" required aria-label="Email address">
+      <button type="submit" aria-label="Submit">&rarr;</button>
+    </form>
+    <p class="modal-success">Thank you! Check your inbox.</p>
+  </div>
+</div>
+
+<!-- Phase 5e: mobile service detail modal -->
+<div class="service-modal-overlay" id="service-modal" hidden>
+  <div class="service-modal-box">
+    <button class="service-modal-close" aria-label="Close">&times;</button>
+    <div class="service-modal-figure"></div>
+    <div class="service-modal-info">
+      <p class="service-modal-title"></p>
+      <p class="service-modal-price"></p>
+      <p class="service-modal-desc"></p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script type="module" src="js/main.js"></script>
+<script src="https://embed.acuityscheduling.com/js/embed.js" type="text/javascript"></script>
+</body>
+</html>

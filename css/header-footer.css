@@ -1,0 +1,244 @@
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  opacity: 0; /* revealed once intro completes / on return visits */
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-premium);
+}
+
+.site-header.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.site-header .grid {
+  align-items: center;
+  width: 100%;
+}
+
+.site-header .wordmark {
+  grid-column: 1 / span 4;
+  justify-self: start;
+}
+
+/* Kept hidden independently of .is-visible so only ONE "bare behavior" is ever
+   on screen: the intro-slot copy owns the reveal until its FLIP glide finishes,
+   at which point intro.js adds .wordmark-ready and hands off. */
+.site-header .wordmark-text {
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-premium);
+}
+
+.site-header.wordmark-ready .wordmark-text {
+  opacity: 1;
+}
+
+.site-nav {
+  grid-column: 9 / span 4;
+  justify-self: end;
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.site-nav a {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--ink);
+  font-weight: 400;
+  padding: var(--sp-1) 0;
+  position: relative;
+}
+
+.site-nav a.is-active {
+  font-weight: 700;
+}
+
+/* Intro header slot — the wordmark is FLIP-animated from here into .site-header */
+.wordmark-intro-slot {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  pointer-events: none;
+  background: var(--bg);
+}
+
+.wordmark-intro-slot .wordmark {
+  font-size: 18px;
+}
+
+/* ---------- Footer ---------- */
+/* Normal document flow at the bottom of the page — not fixed/sticky.
+   Dark/reversed panel: ink background, cream text, accent (peachy rose) on hover. */
+.site-footer {
+  background: var(--ink);
+  color: var(--bg);
+  padding-top: var(--sp-8);
+  padding-bottom: var(--sp-6);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  text-align: center;
+}
+
+.footer-grid {
+  row-gap: var(--sp-6);
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--bg);
+}
+
+.footer-col {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-col p {
+  margin: 0;
+}
+
+.footer-col a {
+  color: var(--bg);
+  text-decoration: none;
+}
+.footer-col a:hover {
+  color: var(--accent);
+}
+
+/* Overrides .footer-col a above — needs to win on specificity (matches its
+   .footer-col a tag+class weight) since this is a solid-fill button, not a
+   plain text link like the others. */
+.footer-col a.footer-book-btn {
+  color: var(--ink);
+}
+.footer-col a.footer-book-btn:hover {
+  color: var(--accent);
+}
+
+.footer-label {
+  margin-bottom: var(--sp-1);
+}
+
+.footer-closed {
+  opacity: 0.6;
+}
+
+.footer-ig a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.footer-book-btn {
+  display: inline-block;
+  margin-top: var(--sp-2);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  padding: 10px 22px;
+}
+.footer-book-btn:hover {
+  color: var(--accent);
+}
+
+.footer-newsletter-form {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 100%;
+}
+
+.footer-newsletter-form input {
+  flex: 1;
+  min-width: 0;
+  max-width: 220px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--bg);
+  padding: var(--sp-1) 2px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--bg);
+  text-align: center;
+}
+.footer-newsletter-form input::placeholder {
+  color: var(--bg);
+  opacity: 0.6;
+}
+
+.footer-newsletter-form button {
+  border: 1px solid var(--bg);
+  background: transparent;
+  color: var(--bg);
+  font-size: 13px;
+  padding: 0 var(--sp-3);
+}
+.footer-newsletter-form button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.footer-newsletter-note {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: var(--sp-1) !important;
+}
+
+.footer-legal-grid {
+  padding-top: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.footer-legal-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-3);
+}
+
+.footer-legal-links a {
+  color: inherit;
+  text-decoration: none;
+}
+.footer-legal-links a:hover {
+  color: var(--accent);
+}
+
+.footer-copyright {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .site-header { height: 72px; }
+  .site-header .grid { display: flex; align-items: center; justify-content: space-between; }
+  .site-header .wordmark { font-size: 14px; letter-spacing: 0.12em; flex-shrink: 0; }
+  .site-nav { gap: var(--sp-2); flex-shrink: 0; }
+  .site-nav a { font-size: 11px; }
+
+  .site-footer { font-size: 14px; padding-top: var(--sp-6); }
+  .footer-col { grid-column: span 6; }
+  .footer-legal-links { flex-wrap: wrap; }
+}
+
+@media (max-width: 420px) {
+  .site-nav { gap: 10px; }
+  .site-nav a { font-size: 10px; }
+}

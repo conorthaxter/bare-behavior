@@ -1,0 +1,112 @@
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 96px;
+  padding-bottom: var(--sp-8);
+  overflow: hidden;
+}
+
+.hero-grid {
+  /* Overrides the base .grid's display:grid — with only two full-width
+     stacked children, the 12-column grid buys nothing here, and its 1fr
+     track sizing has a real Chrome quirk: a spanning item's min-width:0
+     does NOT fully suppress its content's min-content contribution to the
+     tracks it spans, so LESS's width:max-content content (js/fit.js) was
+     inflating the "column" width by hundreds of px on narrow viewports,
+     which fitHero() then read back as availWidth and grew again next pass.
+     Plain block stacking sidesteps the whole mechanism. */
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.hero-headline {
+  grid-column: 1 / span 12;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden; /* LESS's width:max-content child (js/fit.js) must never
+    be able to size this box — an explicit width plus overflow:hidden pins it
+    to the grid track no matter what its content wants to be. */
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.8; /* tightened — LESS/FUZZ pack closer together */
+  font-weight: 400;
+}
+
+.hero-less {
+  display: block;
+  margin-left: 0;
+  /* Fallback only — js/fit.js sets an exact inline font-size + scaleX that
+     fills the viewport width/height once measured; this clamp() just covers
+     the brief window before JS runs (or if it fails to load). */
+  font-size: clamp(90px, 16vw, 320px);
+  white-space: nowrap;
+  opacity: 0;
+  transform-origin: left center;
+}
+
+/* FUZZ is a canvas-driven "fuzzy text" effect (js/fuzzy-text.js). This wrap
+   owns the one-time slide-in-from-right entrance; the canvas inside is
+   already sized/scaled by js/fit.js to match LESS's cap-height and fill its
+   own share of the line width, so no CSS transform is needed for that part. */
+.hero-fuzz-wrap {
+  display: block;
+  margin-left: 26%;
+  margin-top: 0.13em; /* opens a visible gap below LESS, matching the gap above "more confidence" */
+  opacity: 0;
+  transform: translateX(80px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.hero-fuzz-wrap.is-in-view {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.hero-fuzz-canvas {
+  display: block;
+}
+
+.hero-sub {
+  grid-column: 1 / span 12;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden; /* see .hero-headline above — same runaway-width risk,
+    now that the scaled/max-content element is the nested span below */
+  margin-top: -38px; /* the fuzzy-text canvas carries its own bottom padding
+    (fiber overflow room) that already reads as gap before this margin even
+    starts — pulled negative so the total visual gap matches the one above FUZZ. */
+  /* flex centering instead of text-align:center — a wide inline-block
+     centered via text-align sits in a "line box" whose own position can
+     drift once the child's transform is applied; a flex container just
+     centers the item's box directly, which composes predictably with the
+     child's own transform:scaleX() around its own center. */
+  display: flex;
+  justify-content: center;
+}
+
+.hero-sub-text {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-transform: lowercase;
+  font-size: clamp(48px, 10vw, 180px);
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  transform-origin: center center;
+  transition: opacity 1s var(--ease-premium);
+}
+
+.hero-sub-text.is-in-view {
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .hero { padding-top: 72px; }
+  .hero-fuzz-wrap { margin-left: 12%; }
+}
