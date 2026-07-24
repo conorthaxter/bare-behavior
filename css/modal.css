@@ -95,3 +95,72 @@
 
 .modal-overlay.is-submitted .modal-form { display: none; }
 .modal-overlay.is-submitted .modal-success { display: block; }
+
+/* ---------- Bio modal (Come See Us) ---------- */
+.bio-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  background: rgba(52, 34, 34, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-premium);
+}
+
+.bio-modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bio-modal-box {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--ink);
+  padding: var(--sp-8) var(--sp-6);
+  max-width: 480px;
+  width: calc(100% - 48px);
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  text-align: left;
+  transform: translateY(16px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.5s var(--ease-premium), opacity 0.5s var(--ease-premium);
+}
+
+.bio-modal-overlay.is-open .bio-modal-box {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.bio-modal-close {
+  position: absolute;
+  top: var(--sp-3);
+  right: var(--sp-3);
+  font-size: 18px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bio-modal-name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: var(--wordmark-tracking);
+  text-transform: lowercase;
+  font-size: 18px;
+  margin-bottom: var(--sp-3);
+}
+
+.bio-modal-text {
+  font-size: 16px;
+  line-height: 1.6;
+}

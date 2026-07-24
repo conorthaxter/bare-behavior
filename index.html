@@ -157,7 +157,9 @@
       <div class="bios">
         <div class="bio">
           <p class="bio-name">Kylie</p>
-          <div class="bio-photo"></div>
+          <button type="button" class="bio-photo" data-bio-trigger aria-label="Read Kylie's bio"></button>
+          <button type="button" class="bio-link" data-bio-trigger>bio</button>
+          <p class="bio-text" hidden>Hi! I&rsquo;m Kylie, a licensed esthetician, and I&rsquo;ve been helping people like you feel comfortable and confident in their own skin since 2017. Over the past decade in the waxing industry, I&rsquo;ve created a welcoming, judgement-free, inclusive space to serve the Southshore. I pride myself in personalizing each appointment to my clients&rsquo; needs. In turn, I&rsquo;ve created genuine connections with clients founded on trust and care. My goal is to help you feel like the best version of yourself. Whether you're a first-time guest or a returning client, I&rsquo;m excited to help you feel comfortable every step of the way.</p>
         </div>
         <div class="bio">
           <p class="bio-name">Sabreena</p>
@@ -266,6 +268,14 @@
       <p class="service-modal-price"></p>
       <p class="service-modal-desc"></p>
     </div>
+  </div>
+</div>
+
+<div class="bio-modal-overlay" id="bio-modal" hidden>
+  <div class="bio-modal-box">
+    <button class="bio-modal-close" aria-label="Close">&times;</button>
+    <p class="bio-modal-name"></p>
+    <p class="bio-modal-text"></p>
   </div>
 </div>
 

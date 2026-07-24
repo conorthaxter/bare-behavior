@@ -1,4 +1,4 @@
-import { SERVICE_REGIONS, CATEGORY_ORDER, formatPrice } from './services-data.js';
+import { SERVICE_REGIONS, formatPrice } from './services-data.js';
 
 const VIEWBOX = { w: 329.32, h: 754.19 };
 const BACK_VIEWBOX_NATIVE = { w: 324.23, h: 749.24 };
@@ -80,21 +80,22 @@ export async function initServices() {
 // the same height instead of one running much longer than the other.
 const COLUMN_2_CATEGORIES = ['Below the Belt', 'Face'];
 
-function renderMenu() {
-  const menu = document.getElementById('services-menu');
-  if (!menu) return;
-  menu.innerHTML = '';
+// Shared by both the desktop menu (#services-menu) and the mobile tap list
+// (#services-mobile-list) — same Body | Below the Belt + Face column split,
+// same category/item structure. Only how each row is wired up differs
+// (desktop: hover-activated via wireInteractions' delegation; mobile: a
+// direct click handler opening the modal), via the onRow callback.
+function renderColumns(container, onRow) {
+  container.innerHTML = '';
 
   const col1 = document.createElement('div');
   col1.className = 'services-menu-column';
   const col2 = document.createElement('div');
   col2.className = 'services-menu-column';
-  menu.appendChild(col1);
-  menu.appendChild(col2);
+  container.appendChild(col1);
+  container.appendChild(col2);
 
-  // Column 2's own internal order (Below the Belt, then Face underneath)
-  // differs from CATEGORY_ORDER (used elsewhere, e.g. the mobile list) —
-  // render in that explicit sequence rather than CATEGORY_ORDER's.
+  // Column 2's own internal order is Below the Belt, then Face underneath.
   const renderOrder = ['Body', ...COLUMN_2_CATEGORIES];
 
   renderOrder.forEach((category) => {
@@ -119,12 +120,19 @@ function renderMenu() {
         row.textContent = item.name;
         row.dataset.region = region.id;
         row.dataset.itemIndex = idx;
+        onRow(row, region, idx);
         catEl.appendChild(row);
       });
     });
 
     (COLUMN_2_CATEGORIES.includes(category) ? col2 : col1).appendChild(catEl);
   });
+}
+
+function renderMenu() {
+  const menu = document.getElementById('services-menu');
+  if (!menu) return;
+  renderColumns(menu, () => {});
 }
 
 let activeRegionId = null;
@@ -231,33 +239,8 @@ function positionInfobox(region, circle, infobox, connector, wrap) {
 function renderMobileList() {
   const list = document.getElementById('services-mobile-list');
   if (!list) return;
-  list.innerHTML = '';
-
-  CATEGORY_ORDER.forEach((category) => {
-    const regions = SERVICE_REGIONS.filter((r) => r.category === category);
-    if (!regions.length) return;
-
-    const catEl = document.createElement('div');
-    catEl.className = 'services-category';
-
-    const title = document.createElement('div');
-    title.className = 'services-category-title';
-    title.dataset.category = category;
-    title.textContent = category;
-    catEl.appendChild(title);
-
-    regions.forEach((region) => {
-      region.items.forEach((item, idx) => {
-        const row = document.createElement('button');
-        row.type = 'button';
-        row.className = 'service-item-row';
-        row.textContent = item.name;
-        row.addEventListener('click', () => openMobileModal(region, idx));
-        catEl.appendChild(row);
-      });
-    });
-
-    list.appendChild(catEl);
+  renderColumns(list, (row, region, idx) => {
+    row.addEventListener('click', () => openMobileModal(region, idx));
   });
 }
 

@@ -17,7 +17,7 @@ export const SERVICE_REGIONS = [
       { name: 'Sideburns', price: 18 },
       { name: 'Nostrils', price: 20 },
       { name: 'Ears', price: 20 },
-      { name: 'Full face', price: 60 },
+      { name: 'Full face', price: 70 },
       { name: 'Eyebrow wax & tint', price: 45 },
       { name: 'Tint', price: 25 },
     ],

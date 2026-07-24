@@ -70,11 +70,43 @@ function wireServiceModalClose() {
   });
 }
 
+function initBioModal() {
+  const overlay = document.getElementById('bio-modal');
+  const triggers = document.querySelectorAll('[data-bio-trigger]');
+  if (!overlay || !triggers.length) return;
+
+  const nameEl = overlay.querySelector('.bio-modal-name');
+  const textEl = overlay.querySelector('.bio-modal-text');
+
+  function open(bio) {
+    nameEl.textContent = bio.querySelector('.bio-name').textContent;
+    textEl.textContent = bio.querySelector('.bio-text').textContent;
+    overlay.hidden = false;
+    requestAnimationFrame(() => overlay.classList.add('is-open'));
+  }
+
+  function close() {
+    overlay.classList.remove('is-open');
+    setTimeout(() => {
+      overlay.hidden = true;
+    }, 400);
+  }
+
+  triggers.forEach((el) => {
+    el.addEventListener('click', () => open(el.closest('.bio')));
+  });
+  overlay.querySelector('.bio-modal-close').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+}
+
 async function main() {
   wireNavSmoothScroll();
   wireServiceModalClose();
   wireFooterNewsletter();
   initFaqAccordion();
+  initBioModal();
   initHeroFuzz();
 
   await initServices();

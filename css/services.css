@@ -254,5 +254,42 @@
   #services-menu { display: none; }
   .services-menu-col { grid-column: 1 / span 12; grid-row: auto; height: auto; display: block; }
   .services-title { text-align: left; margin-bottom: var(--sp-6); }
-  .service-modal-box { grid-template-columns: 1fr; text-align: center; }
+  /* Stacked single column now (figure above text), so the figure's own
+     width:100% sizing — fine side-by-side on desktop — would blow it up to
+     its full ~2.3:1 tall aspect ratio at the modal's ~330px width (~760px
+     tall), pushing title/price/description off screen both above and
+     below. Capping its height and letting width follow keeps it sane, and
+     the box itself scrolls as a last resort on very short viewports. */
+  .service-modal-box {
+    grid-template-columns: 1fr;
+    text-align: center;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+  .service-modal-figure {
+    /* height:100% on the SVG below needs a *definite* height to resolve
+       against — max-height alone doesn't give it one (a height that
+       depends on auto-sized content the child is also sizing against is
+       circular, and resolves as if unset), which was collapsing the
+       figure to nothing. */
+    height: 32vh;
+    width: auto;
+    margin: 0 auto var(--sp-3);
+  }
+  .service-modal-figure svg {
+    width: auto;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  /* Same Body | Below the Belt + Face column split as desktop, just
+     narrower and smaller — without it, this was a single flat column that
+     ran well past one screen's worth of scrolling. */
+  .services-mobile-list {
+    display: flex;
+    gap: var(--sp-3);
+    font-size: 14px;
+  }
+  .services-mobile-list .services-menu-column { flex: 1; min-width: 0; }
+  .services-mobile-list .service-item-row { line-height: 1.35; }
 }
