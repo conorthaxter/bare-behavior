@@ -164,3 +164,17 @@
   font-size: 16px;
   line-height: 1.6;
 }
+
+@media (max-width: 900px) {
+  /* Wider + less padding — the same text wraps into fewer lines at the
+     wider measure, and the smaller padding trims further, so the box
+     doesn't have to be nearly as tall to fit Kylie's full bio on screen. */
+  .bio-modal-box {
+    width: calc(100% - 24px);
+    padding: var(--sp-4) var(--sp-3);
+  }
+  .bio-modal-close {
+    top: var(--sp-2);
+    right: var(--sp-2);
+  }
+}

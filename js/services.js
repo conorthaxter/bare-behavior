@@ -293,9 +293,13 @@ export function playServicesIntro({ instant } = {}) {
   if (servicesIntroPlayed) return;
   servicesIntroPlayed = true;
 
-  const title = document.querySelector('.services-title');
+  // Desktop-only list — the mobile tap list (#services-mobile-list) shares
+  // the .services-menu class but has no figures/dots to sync a draw-on
+  // effect with, so it's deliberately excluded from the selector below.
+  // Untouched by GSAP, its rows just render at their normal CSS opacity —
+  // no fade, no per-item stagger delay before the list is fully visible.
   const dots = Object.values(regionEls).map((r) => r.circle);
-  const listRows = [...document.querySelectorAll('.services-menu .services-category-title, .services-menu .service-item-row')];
+  const listRows = [...document.querySelectorAll('#services-menu .services-category-title, #services-menu .service-item-row')];
   const frontPaths = frontSvgEl ? [...frontSvgEl.querySelectorAll('path')] : [];
   const backPaths = backSvgEl ? [...backSvgEl.querySelectorAll('path')] : [];
 
@@ -309,7 +313,12 @@ export function playServicesIntro({ instant } = {}) {
 
   gsapInstance.set(dots, { scale: 0, transformOrigin: '50% 50%' });
   gsapInstance.set(listRows, { opacity: 0, y: 16 });
-  gsapInstance.set(title, { opacity: 0, y: 24 });
+  // The title itself is NOT animated here — .services-title is already
+  // fully owned by initTitleReveal()'s CSS-class system (js/scroll.js),
+  // the same one driving bookings/info/faqs. GSAP touching it here used to
+  // read a stale transform (whatever initTitleReveal's CSS had set at that
+  // instant) and freeze it into an inline style forever, permanently
+  // fighting the CSS system and leaving the title stuck off-position.
 
   // Both figures are the same open-outline artwork (not a solid silhouette),
   // so both draw on identically via stroke-dasharray/dashoffset.
@@ -321,11 +330,9 @@ export function playServicesIntro({ instant } = {}) {
 
   const tl = gsapInstance.timeline();
 
-  tl.to(title, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' });
   tl.to(
     allPaths,
-    { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', stagger: 0.015 },
-    '-=0.2'
+    { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', stagger: 0.015 }
   );
   tl.to(
     dots,
