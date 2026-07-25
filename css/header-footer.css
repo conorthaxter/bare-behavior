@@ -202,6 +202,14 @@
   margin-top: var(--sp-1) !important;
 }
 
+.footer-tagline {
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  padding-top: var(--sp-6);
+}
+
 .footer-legal-grid {
   padding-top: var(--sp-4);
   display: flex;
@@ -233,7 +241,15 @@
 @media (max-width: 900px) {
   .site-header { height: 72px; }
   .site-header .grid { display: flex; align-items: center; justify-content: space-between; }
-  .site-header .wordmark { font-size: 14px; letter-spacing: 0.12em; flex-shrink: 0; }
+  /* letter-spacing intentionally NOT overridden here — it must match the
+     intro-slot wordmark's tracking (--wordmark-tracking, base .wordmark
+     rule) exactly. The FLIP animation scales the intro copy to match this
+     element's size, and that scale carries tracking along with it
+     proportionally — a different absolute letter-spacing value here can't
+     be corrected for by scale alone, so the two never quite line up and
+     the swap at the end of the flip reads as a jolt (text spacing visibly
+     snapping). This was mobile-only: desktop never overrode it. */
+  .site-header .wordmark { font-size: 14px; flex-shrink: 0; }
   .site-nav { gap: var(--sp-2); flex-shrink: 0; }
   .site-nav a { font-size: 13px; }
 
