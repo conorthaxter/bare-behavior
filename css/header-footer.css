@@ -31,10 +31,14 @@
 
 /* Kept hidden independently of .is-visible so only ONE "bare behavior" is ever
    on screen: the intro-slot copy owns the reveal until its FLIP glide finishes,
-   at which point intro.js adds .wordmark-ready and hands off. */
+   at which point intro.js adds .wordmark-ready and hands off. No transition
+   here on purpose — intro.js hides the flipped intro wordmark with a hard
+   display:none (can't be faded) in that same instant, so this needs to
+   appear just as instantly, or the two fall out of sync: the intro copy
+   would vanish immediately while this was still mid-fade-in, reading as a
+   jolt/flicker rather than a seamless handoff. */
 .site-header .wordmark-text {
   opacity: 0;
-  transition: opacity 0.25s var(--ease-premium);
 }
 
 .site-header.wordmark-ready .wordmark-text {
@@ -231,7 +235,7 @@
   .site-header .grid { display: flex; align-items: center; justify-content: space-between; }
   .site-header .wordmark { font-size: 14px; letter-spacing: 0.12em; flex-shrink: 0; }
   .site-nav { gap: var(--sp-2); flex-shrink: 0; }
-  .site-nav a { font-size: 11px; }
+  .site-nav a { font-size: 13px; }
 
   .site-footer { font-size: 14px; padding-top: var(--sp-6); }
   .footer-col { grid-column: span 6; }
@@ -239,6 +243,10 @@
 }
 
 @media (max-width: 420px) {
-  .site-nav { gap: 10px; }
-  .site-nav a { font-size: 10px; }
+  .site-nav { gap: 8px; }
+  .site-nav a { font-size: 12px; }
+}
+
+@media (max-width: 340px) {
+  .site-nav { gap: 4px; }
 }

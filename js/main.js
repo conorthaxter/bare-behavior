@@ -26,13 +26,40 @@ function initHeroFuzz() {
   });
 }
 
+// CSS scroll-snap (mandatory + scroll-snap-stop:always, needed so a fast
+// scroll can't skip past Come See Us into the footer — see base.css) can
+// fight a programmatic scrollIntoView while it's mid-flight: the snap
+// machinery re-resolves against the *current* scroll position on every
+// frame, and on some engines (this shows up on mobile Safari in particular)
+// that resolves to the nearest/first snap point rather than letting the
+// scroll continue on to the intended target — nav links landing back on
+// hero regardless of which one was clicked. Turning snap off for the
+// duration of the scroll and back on once it settles sidesteps the
+// conflict entirely rather than depending on any particular engine's
+// snap-vs-programmatic-scroll resolution order.
 function wireNavSmoothScroll() {
+  const html = document.documentElement;
+
   document.querySelectorAll('a[data-section]').forEach((link) => {
     link.addEventListener('click', (e) => {
       const targetId = link.dataset.section;
       const target = document.getElementById(targetId);
       if (!target) return;
       e.preventDefault();
+
+      const wasSnapping = html.classList.contains('snap-enabled');
+      if (wasSnapping) html.classList.remove('snap-enabled');
+
+      let settled = false;
+      const reenable = () => {
+        if (settled) return;
+        settled = true;
+        if (wasSnapping) html.classList.add('snap-enabled');
+        window.removeEventListener('scrollend', reenable);
+      };
+      window.addEventListener('scrollend', reenable);
+      setTimeout(reenable, 1200); // scrollend isn't supported everywhere — fallback
+
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
