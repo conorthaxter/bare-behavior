@@ -237,7 +237,7 @@
 }
 
 .contact-box .ct-group p { margin: 0; }
-.contact-box .ct-group a { color: var(--accent); }
+.contact-box .ct-group a { color: var(--ink); text-decoration: underline; }
 
 /* Single persistent address box: docks bottom-right (Bookings -> Info -> FAQs),
    then hands off to centered (Come See Us). Position driven via JS transform

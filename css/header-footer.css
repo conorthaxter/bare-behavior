@@ -226,11 +226,14 @@
   gap: var(--sp-3);
 }
 
-.footer-legal-links a {
+.footer-legal-links a,
+.footer-legal-links-btn {
   color: inherit;
   text-decoration: none;
+  font-size: inherit;
 }
-.footer-legal-links a:hover {
+.footer-legal-links a:hover,
+.footer-legal-links-btn:hover {
   color: var(--accent);
 }
 

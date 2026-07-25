@@ -128,12 +128,46 @@ function initBioModal() {
   });
 }
 
+// Shared by the footer's Privacy / Terms / Cancellation policy links — each
+// is a static-content modal reusing the .bio-modal-* styling, just wired to
+// a plain button instead of the bio system's per-person content swap.
+function initStaticModal(triggerId, overlayId) {
+  const trigger = document.getElementById(triggerId);
+  const overlay = document.getElementById(overlayId);
+  if (!trigger || !overlay) return;
+
+  function open() {
+    overlay.hidden = false;
+    requestAnimationFrame(() => overlay.classList.add('is-open'));
+  }
+
+  function close() {
+    overlay.classList.remove('is-open');
+    setTimeout(() => {
+      overlay.hidden = true;
+    }, 400);
+  }
+
+  trigger.addEventListener('click', open);
+  overlay.querySelector('.bio-modal-close').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+}
+
+function initPolicyModals() {
+  initStaticModal('privacy-trigger', 'privacy-modal');
+  initStaticModal('terms-trigger', 'terms-modal');
+  initStaticModal('cancellation-policy-trigger', 'policy-modal');
+}
+
 async function main() {
   wireNavSmoothScroll();
   wireServiceModalClose();
   wireFooterNewsletter();
   initFaqAccordion();
   initBioModal();
+  initPolicyModals();
   initHeroFuzz();
 
   await initServices();
