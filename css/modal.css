@@ -78,6 +78,10 @@
 
 .modal-form button {
   width: 48px;
+  flex-shrink: 0; /* without this, a narrow modal (mobile) squeezes the
+    button down along with the input instead of just compressing the
+    input — the button was rendering at ~21px instead of its specified
+    48px, reading as "thin" */
   background: var(--ink);
   color: var(--bg);
   display: flex;

@@ -35,12 +35,15 @@
 }
 
 /* The back figure's source path isn't a true centerline (like front's
-   hand-drawn strokes) — it's a pre-converted stroke-to-fill band, so its
-   own boundary already carries some inherent width. Stroking that boundary
-   at the same 2px as front effectively doubles the visual weight; a
-   thinner stroke here compensates so both figures read the same. */
+   hand-drawn strokes) — it's a pre-converted stroke-to-fill band. Stroking
+   its boundary (even thinned down to compensate for the band's own width)
+   re-traces every small irregularity left over from that stroke-to-fill
+   conversion, reading as visibly rougher/wobblier than front's clean
+   strokes. Filling the band instead just covers its interior — small edge
+   irregularities disappear into the fill rather than getting outlined. */
 .figure-back svg path {
-  stroke-width: 0.8px;
+  fill: var(--ink);
+  stroke: none;
 }
 
 .figure-dot {

@@ -54,9 +54,16 @@ export function fitHero() {
   const availHeight = hero.clientHeight - padTop - padBottom;
   const SUB_GAP = 32; // var(--sp-4)
 
+  // Filling 100% of availHeight reads fine on a wide/short desktop
+  // viewport, but on a narrow/tall phone screen it means LESS+FUZZ alone
+  // eat the vast majority of the screen before "more confidence" (or
+  // anything else) is even visible — oversized rather than bold. Mobile
+  // targets a bit less than the full budget, leaving real breathing room.
+  const FILL_RATIO = window.innerWidth <= 900 ? 0.82 : 1;
+
   // LESS line-height 0.8 + FUZZ's matching box (~0.8, net ~0.75 after its
   // negative margin-top) + the sub line at SUB_RATIO of the shared size.
-  let bigSize = (availHeight - SUB_GAP) / (0.8 + 0.75 + SUB_RATIO);
+  let bigSize = ((availHeight - SUB_GAP) * FILL_RATIO) / (0.8 + 0.75 + SUB_RATIO);
 
   const WORD_WIDTH_RATIO = 0.74; // LESS and FUZZ share this width, not the full row
 

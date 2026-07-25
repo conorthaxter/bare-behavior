@@ -32,9 +32,9 @@ export const SERVICE_REGIONS = [
   },
   {
     id: 'shoulders',
-    side: 'front',
-    dotXY: [210, 138],
-    boxSide: 'right',
+    side: 'back',
+    dotXY: [200, 138],
+    boxSide: 'left',
     category: 'Body',
     items: [{ name: 'Shoulders', price: 19 }],
   },

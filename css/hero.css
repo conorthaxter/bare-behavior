@@ -108,5 +108,10 @@
 
 @media (max-width: 900px) {
   .hero { padding-top: 72px; }
-  .hero-fuzz-wrap { margin-left: 12%; }
+  /* No margin-left override here (was a stale 12%, left over from before
+     LESS/FUZZ shared the same 74%-of-row width) — the base 26% is what
+     makes 26% + 74% = 100%, landing FUZZ flush with the right margin, same
+     as LESS is flush left. That relationship holds at any viewport width
+     since both are percentages; overriding just one broke it on mobile,
+     leaving FUZZ ~49px short of the margin it should reach. */
 }

@@ -309,10 +309,10 @@ export function playServicesIntro({ instant } = {}) {
   }
 
   const gsapInstance = window.gsap;
-  const allPaths = [...frontPaths, ...backPaths];
 
   gsapInstance.set(dots, { scale: 0, transformOrigin: '50% 50%' });
   gsapInstance.set(listRows, { opacity: 0, y: 16 });
+  gsapInstance.set(backPaths, { opacity: 0 });
   // The title itself is NOT animated here — .services-title is already
   // fully owned by initTitleReveal()'s CSS-class system (js/scroll.js),
   // the same one driving bookings/info/faqs. GSAP touching it here used to
@@ -320,9 +320,11 @@ export function playServicesIntro({ instant } = {}) {
   // instant) and freeze it into an inline style forever, permanently
   // fighting the CSS system and leaving the title stuck off-position.
 
-  // Both figures are the same open-outline artwork (not a solid silhouette),
-  // so both draw on identically via stroke-dasharray/dashoffset.
-  allPaths.forEach((path) => {
+  // Front is drawn with true centerline strokes, so it can draw itself on
+  // via stroke-dasharray/dashoffset. Back is a filled band shape (see
+  // services.css) — dasharray only affects strokes, so it just fades in
+  // instead.
+  frontPaths.forEach((path) => {
     const len = path.getTotalLength();
     path.style.strokeDasharray = `${len}`;
     path.style.strokeDashoffset = `${len}`;
@@ -331,9 +333,10 @@ export function playServicesIntro({ instant } = {}) {
   const tl = gsapInstance.timeline();
 
   tl.to(
-    allPaths,
+    frontPaths,
     { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', stagger: 0.015 }
   );
+  tl.to(backPaths, { opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.6');
   tl.to(
     dots,
     { scale: 1, duration: 0.4, ease: 'back.out(2.5)', stagger: 0.06 },
