@@ -1,5 +1,6 @@
 import { initIntro } from './intro.js';
 import { initOfferModal } from './modal.js';
+import { submitToMailingList } from './config.js';
 import { initServices, closeMobileModal, playServicesIntro } from './services.js';
 import { initScrollSnap, initNavActiveState, initCardTransitions, initServicesReveal, initTitleReveal } from './scroll.js';
 import { initFit, registerFuzzyText } from './fit.js';
@@ -71,8 +72,7 @@ function wireFooterNewsletter() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const input = form.querySelector('input[type="email"]');
-    // placeholder — wire to an email provider later
-    console.log('footer newsletter submit', input.value);
+    submitToMailingList(input.value, 'footer').catch(() => {});
     input.value = '';
     input.placeholder = 'Thanks — check your inbox!';
   });

@@ -1,9 +1,6 @@
-const SEEN_KEY = 'bb_modal_seen';
+import { submitToMailingList } from './config.js';
 
-function onSubmit(email) {
-  // placeholder — wire to an email provider later
-  console.log('offer modal submit', email);
-}
+const SEEN_KEY = 'bb_modal_seen';
 
 export function initOfferModal() {
   const overlay = document.getElementById('offer-modal');
@@ -36,7 +33,7 @@ export function initOfferModal() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    onSubmit(input.value);
+    submitToMailingList(input.value, 'popup').catch(() => {});
     overlay.classList.add('is-submitted');
     setTimeout(close, 1600);
   });
