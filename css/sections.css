@@ -304,6 +304,15 @@
   justify-content: center;
 }
 
+/* The [hidden] attribute is only a low-priority UA-stylesheet rule — the
+   .bios{display:flex} rule above has equal specificity and comes later in
+   the cascade, so it was silently winning and the attribute did nothing.
+   The extra attribute selector here outranks the plain class rule instead
+   of relying on source order. */
+.bios[hidden] {
+  display: none;
+}
+
 .bio {
   display: flex;
   flex-direction: column;

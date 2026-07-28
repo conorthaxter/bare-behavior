@@ -91,7 +91,6 @@ export const SERVICE_REGIONS = [
       { name: 'Manzilian', price: 95 },
       { name: 'Brazilian Rehab', price: 'prices vary', note: 'steam, extractions, mask' },
       { name: 'Manzilian Rehab', price: 'prices vary' },
-      { name: 'Vagacial', price: 60 },
     ],
   },
   {
