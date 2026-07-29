@@ -74,7 +74,7 @@ export const SERVICE_REGIONS = [
     category: 'Body',
     items: [
       { name: 'Legs', price: 85 },
-      { name: 'Legs (half)', price: 42 },
+      { name: 'Legs (half)', price: 48 },
       { name: 'Inner thigh', price: 12 },
     ],
   },

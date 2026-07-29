@@ -29,7 +29,7 @@ export function initNavActiveState() {
   sections.forEach((s) => observer.observe(s));
 }
 
-// Uniform per-card choreography (services / bookings / info / faqs): title
+// Uniform per-card choreography (services / info / faqs): title
 // slides in from the right and settles BEFORE content starts its
 // opacity+upward entrance; on the way out, title slides off left before
 // content fades/drops away. Same lead-then-follow relationship in both
@@ -38,7 +38,6 @@ const CARD_STAGGER_MS = 220;
 
 export function initCardTransitions() {
   const cards = [
-    { section: document.getElementById('bookings'), title: document.querySelector('#bookings .card-title'), content: [document.querySelector('#bookings .bookings-embed-wrap')] },
     { section: document.getElementById('info'), title: document.querySelector('#info .card-title'), content: [document.querySelector('#info .card-content')] },
     { section: document.getElementById('faqs'), title: document.querySelector('#faqs .card-title'), content: [document.querySelector('#faqs .card-content')] },
   ].filter((c) => c.section && c.title);

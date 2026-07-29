@@ -165,57 +165,6 @@
 
 .faq-outro { margin-top: var(--sp-2); font-weight: 700; }
 
-/* ---------- Bookings ---------- */
-.bookings-embed-wrap {
-  grid-column: 1 / span 8;
-  grid-row: 1;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 0;
-}
-
-.bookings-embed-placeholder {
-  border: 1px solid var(--ink);
-  width: 100%;
-  height: 100%;
-  /* Acuity's embed.js resizes the iframe *taller* to fit its own content
-     (it expects the page around it to grow, not to scroll the iframe
-     itself — Acuity's internal page isn't guaranteed to have its own
-     scrollbar). Forcing the iframe to our fixed height with !important
-     fought that and left the extra content simply unreachable — no
-     scrollbar anywhere. Letting the iframe grow and clipping/scrolling it
-     here, at the wrapper, keeps our layout fixed while keeping all of
-     Acuity's content reachable via a normal scroll. */
-  overflow-y: auto;
-}
-
-/* Acuity's iframe is cross-origin — nothing inside it is reachable from our
-   CSS, so all we can do is size the iframe *element* itself. min-height
-   (not height) fills the existing placeholder box exactly by default, but
-   still lets Acuity's own resize script grow it taller when its content
-   needs more room — the wrapper above scrolls the difference. */
-.bookings-embed-iframe {
-  display: block;
-  width: 100%;
-  min-height: 100%;
-  border: none;
-}
-
-.bookings-embed-note {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 20px;
-}
-
-.bookings-embed-note--small {
-  font-family: var(--font-sans);
-  font-style: normal;
-  font-size: 14px;
-  max-width: 380px;
-  color: var(--accent);
-}
-
 /* ---------- Contact / address box (shared visual style) ---------- */
 .contact-box {
   border: 1px solid var(--ink);
@@ -386,12 +335,6 @@ button.bio-photo:hover {
   .card-title { grid-column: 1 / span 12; grid-row: auto; align-self: auto; margin-bottom: var(--sp-4); text-align: left; transform: translateY(24px); }
   .card-title.is-in-view { transform: translateY(0); }
   .card-content { grid-column: 1 / span 12; grid-row: auto; height: auto; overflow: visible; }
-
-  .bookings-embed-wrap { grid-column: 1 / span 12; grid-row: auto; height: auto; align-items: stretch; }
-  /* A fixed height (not auto) so the wrapper has a real boundary to clip
-     and scroll against — same reasoning as the desktop rule above. */
-  .bookings-embed-placeholder { height: 480px; }
-  .bookings-embed-iframe { min-height: 100%; }
 
   .address-box-fixed { display: none !important; }
   .contact-box-slot--mobile { display: block; margin-top: var(--sp-6); }

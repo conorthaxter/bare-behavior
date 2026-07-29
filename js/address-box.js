@@ -1,4 +1,4 @@
-const DOCKED_SECTIONS = ['bookings', 'info', 'faqs'];
+const DOCKED_SECTIONS = ['info', 'faqs'];
 
 export function initAddressBox() {
   const box = document.getElementById('address-box');
@@ -14,7 +14,7 @@ export function initAddressBox() {
   function positionDocked(animate) {
     // Right offset matches the grid's own side margin; bottom offset matches
     // --card-bottom so the box's bottom edge lines up exactly with the
-    // Bookings embed placeholder's bottom edge (same clearance, same card system).
+    // card system's own bottom clearance (same as Info/FAQs content).
     const style = getComputedStyle(document.documentElement);
     const margin = parseFloat(style.getPropertyValue('--margin')) || 24;
     const cardBottom = parseFloat(style.getPropertyValue('--card-bottom')) || margin;
@@ -49,9 +49,9 @@ export function initAddressBox() {
   // start below the fold, invisible, ready to slide up on first dock
   positionOffscreen();
 
-  // Box only ever docks bottom-right for Bookings/Info/FAQs; Come See Us has
-  // its own bios now (address details live in the footer instead), so any
-  // other section — including Come See Us and the footer — just hides it.
+  // Box only ever docks bottom-right for Info/FAQs; Come See Us has its own
+  // bios now (address details live in the footer instead), so any other
+  // section — including Come See Us and the footer — just hides it.
   const intersecting = new Set();
   function resolveState() {
     if (DOCKED_SECTIONS.some((id) => intersecting.has(id))) return 'docked';
